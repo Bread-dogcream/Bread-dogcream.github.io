@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Простая галерея картинок</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f0f4f8;
+      font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .gallery-container {
+      max-width: 750px;
+      width: 100%;
+      background: white;
+      border-radius: 2rem;
+      padding: 2rem 1.8rem 1.8rem;
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.2);
+      transition: box-shadow 0.2s;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      text-align: center;
+      color: #0b1a33;
+      letter-spacing: -0.3px;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Основное окно просмотра */
+    .main-image-box {
+      position: relative;
+      width: 100%;
+      background: #eef2f7;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    #mainImage {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.25s ease;
+    }
+
+    /* Кнопки навигации (вперед/назад) */
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(4px);
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 60px;
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: #1a2b44;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+      transition: background 0.15s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .nav-btn:hover {
+      background: white;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+    }
+
+    .nav-btn:active {
+      transform: translateY(-50%) scale(0.92);
+    }
+
+    .prev-btn {
+      left: 12px;
+    }
+
+    .next-btn {
+      right: 12px;
+    }
+
+    /* Миниатюры (превью) */
+    .thumbnails {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 1.8rem;
+      padding: 0.2rem 0.2rem;
+    }
+
+    .thumb {
+      width: 72px;
+      height: 72px;
+      border-radius: 16px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: border 0.15s, transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+      background: #dce2ea;
+    }
+
+    .thumb:hover {
+      transform: scale(1.04);
+      border-color: #8aa3c9;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .thumb.active {
+      border-color: #1f4e8a;
+      box-shadow: 0 0 0 3px rgba(31, 78, 138, 0.25);
+      transform: scale(1.02);
+    }
+
+    /* Информация о текущем изображении */
+    .image-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.2rem;
+      padding: 0.4rem 0.2rem 0;
+      font-size: 0.95rem;
+      color: #2c3e5a;
+      border-top: 1px solid #e2eaf2;
+      padding-top: 1rem;
+    }
+
+    .image-counter {
+      font-weight: 500;
+      background: #eef3f9;
+      padding: 0.25rem 1rem;
+      border-radius: 30px;
+      font-size: 0.9rem;
+    }
+
+    .image-title {
+      font-weight: 500;
+      color: #0b1a33;
+      max-width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 550px) {
+      .gallery-container {
+        padding: 1.2rem 1rem 1.2rem;
+        border-radius: 1.5rem;
+      }
+      .thumb {
+        width: 60px;
+        height: 60px;
+      }
+      .nav-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 1.2rem;
+      }
+      .prev-btn {
+        left: 6px;
+      }
+      .next-btn {
+        right: 6px;
+      }
+      h1 {
+        font-size: 1.4rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .thumb {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+      }
+      .image-title {
+        max-width: 120px;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="gallery-container">
+  <h1>🖼️ Галерея</h1>
+
+  <div class="main-image-box">
+    <img id="mainImage" src="https://picsum.photos/id/1015/600/400" alt="Главное изображение">
+    
+    <button class="nav-btn prev-btn" id="prevBtn" aria-label="Предыдущее">‹</button>
+    <button class="nav-btn next-btn" id="nextBtn" aria-label="Следующее">›</button>
+  </div>
+
+  <!-- Миниатюры -->
+  <div class="thumbnails" id="thumbnailsContainer"></div>
+
+  <div class="image-info">
+    <span class="image-title" id="imageTitle">Горный пейзаж</span>
+    <span class="image-counter" id="imageCounter">1 / 8</span>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ----- МАССИВ С ИЗОБРАЖЕНИЯМИ -----
+    // Используем picsum.photos для красивых случайных картинок.
+    // Добавим подписи для каждой.
+    const images = [
+      { id: '1015', title: 'Горный пейзаж' },
+      { id: '1016', title: 'Дорога в лесу' },
+      { id: '1018', title: 'Горное озеро' },
+      { id: '1020', title: 'Собака на лугу' },
+      { id: '1024', title: 'Птица на ветке' },
+      { id: '1027', title: 'Человек в горах' },
+      { id: '1035', title: 'Водопад' },
+      { id: '1039', title: 'Закат в лесу' }
+    ];
+
+    // Базовый URL для picsum (можно менять размер)
+    const BASE_URL = 'https://picsum.photos/id/';
+    const IMG_WIDTH = 600;
+    const IMG_HEIGHT = 400;
+
+    // Элементы DOM
+    const mainImage = document.getElementById('mainImage');
+    const thumbContainer = document.getElementById('thumbnailsContainer');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const imageTitle = document.getElementById('imageTitle');
+    const imageCounter = document.getElementById('imageCounter');
+
+    // Текущий индекс
+    let currentIndex = 0;
+
+    // ----- ФУНКЦИЯ ОБНОВЛЕНИЯ ГАЛЕРЕИ -----
+    function updateGallery(index) {
+      // Защита от выхода за границы
+      if (index < 0) index = images.length - 1;
+      if (index >= images.length) index = 0;
+      currentIndex = index;
+
+      const imageData = images[currentIndex];
+      // Формируем URL картинки с нужным размером
+      const imageUrl = `${BASE_URL}${imageData.id}/${IMG_WIDTH}/${IMG_HEIGHT}`;
+
+      // Меняем главное изображение (с лёгким эффектом)
+      mainImage.style.opacity = '0.6';
+      setTimeout(() => {
+        mainImage.src = imageUrl;
+        mainImage.alt = imageData.title;
+        mainImage.style.opacity = '1';
+      }, 120);
+
+      // Обновляем информацию
+      imageTitle.textContent = imageData.title;
+      imageCounter.textContent = `${currentIndex + 1} / ${images.length}`;
+
+      // Обновляем активный класс на миниатюрах
+      const thumbs = document.querySelectorAll('.thumb');
+      thumbs.forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === currentIndex);
+      });
+
+      // Прокручиваем миниатюры, чтобы активная была видна (опционально)
+      const activeThumb = thumbs[currentIndex];
+      if (activeThumb) {
+        activeThumb.scrollIntoView({ block: 'nearest', behavior: 'smooth', inline: 'center' });
+      }
+    }
+
+    // ----- СОЗДАНИЕ МИНИАТЮР -----
+    function renderThumbnails() {
+      thumbContainer.innerHTML = ''; // очищаем
+
+      images.forEach((img, idx) => {
+        const thumb = document.createElement('img');
+        thumb.className = 'thumb';
+        // Для миниатюр используем меньший размер (200x150)
+        thumb.src = `${BASE_URL}${img.id}/200/150`;
+        thumb.alt = img.title;
+        thumb.loading = 'lazy';
+        thumb.dataset.index = idx;
+
+        // Добавляем активный класс для первого
+        if (idx === 0) thumb.classList.add('active');
+
+        // Клик по миниатюре
+        thumb.addEventListener('click', function() {
+          const index = parseInt(this.dataset.index, 10);
+          updateGallery(index);
+        });
+
+        thumbContainer.appendChild(thumb);
+      });
+    }
+
+    // ----- ОБРАБОТЧИКИ КНОПОК -----
+    function handlePrev() {
+      updateGallery(currentIndex - 1);
+    }
+
+    function handleNext() {
+      updateGallery(currentIndex + 1);
+    }
+
+    // ----- ИНИЦИАЛИЗАЦИЯ -----
+    function init() {
+      renderThumbnails();
+      // Устанавливаем первое изображение
+      updateGallery(0);
+
+      // Назначаем события кнопкам
+      prevBtn.addEventListener('click', handlePrev);
+      nextBtn.addEventListener('click', handleNext);
+
+      // Клавиши клавиатуры (влево/вправо)
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          handlePrev();
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          handleNext();
+        }
+      });
+
+      // На случай если картинки не загрузятся — подстраховка
+      mainImage.addEventListener('error', function() {
+        this.src = 'https://picsum.photos/seed/fallback/600/400';
+        this.alt = 'Изображение недоступно';
+      });
+
+      console.log('🖼️ Галерея загружена, изображений:', images.length);
+    }
+
+    // Запускаем всё
+    init();
+
+  })();
+</script>
+</body>
+</html>

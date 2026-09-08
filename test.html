@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Простой сайт</title>
+  <!-- Подключаем шрифт для красоты -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    /* Обнуляем отступы и задаём базовые стили */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f4f7fc;
+      color: #1e293b;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    /* Карточка-контейнер */
+    .card {
+      max-width: 720px;
+      width: 100%;
+      background: white;
+      border-radius: 2rem;
+      padding: 2.5rem 2.8rem;
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.25s ease;
+      text-align: center;
+    }
+
+    .card:hover {
+      box-shadow: 0 30px 50px -16px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Логотип / аватарка */
+    .avatar {
+      width: 88px;
+      height: 88px;
+      background: linear-gradient(145deg, #3b82f6, #6366f1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: white;
+      box-shadow: 0 8px 16px -4px rgba(59, 130, 246, 0.3);
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.35rem;
+      color: #0f172a;
+    }
+
+    .subhead {
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: #475569;
+      margin-bottom: 1.8rem;
+      border-bottom: 2px solid #eef2f6;
+      padding-bottom: 1.2rem;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #334155;
+      margin-bottom: 1.2rem;
+    }
+
+    .highlight {
+      background: #eef6ff;
+      padding: 0.4rem 0.8rem;
+      border-radius: 40px;
+      display: inline-block;
+      font-weight: 500;
+      color: #2563eb;
+    }
+
+    /* Кнопка — главный интерактивный элемент */
+    .btn {
+      display: inline-block;
+      background: #1e293b;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.8rem 2.2rem;
+      border: none;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      margin-top: 1rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      letter-spacing: 0.3px;
+    }
+
+    .btn:hover {
+      background: #0f172a;
+      transform: scale(1.02);
+      box-shadow: 0 10px 20px -8px rgba(15, 23, 42, 0.25);
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+      background: #334155;
+    }
+
+    /* Счётчик кликов */
+    .counter-box {
+      margin-top: 2rem;
+      padding: 1rem 1.2rem;
+      background: #f8fafc;
+      border-radius: 60px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-size: 0.95rem;
+      border: 1px solid #e2e8f0;
+    }
+
+    .counter-box span {
+      font-weight: 700;
+      font-size: 1.4rem;
+      min-width: 2.4rem;
+      color: #2563eb;
+    }
+
+    /* подвал */
+    .footer {
+      margin-top: 2.8rem;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      letter-spacing: 0.3px;
+      border-top: 1px solid #e9edf2;
+      padding-top: 1.6rem;
+      width: 100%;
+      text-align: center;
+    }
+
+    .footer a {
+      color: #3b82f6;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* адаптивность для маленьких экранов */
+    @media (max-width: 500px) {
+      .card {
+        padding: 2rem 1.5rem;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      .avatar {
+        width: 72px;
+        height: 72px;
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <!-- Аватар с инициалами -->
+    <div class="avatar">✨</div>
+
+    <h1>Привет, мир!</h1>
+    <div class="subhead">Это простой сайт на HTML</div>
+
+    <p>
+      Здесь живёт <span class="highlight">интерактивная кнопка</span> 
+      и немного вдохновения. Никаких лишних сложностей — простота и стиль.
+    </p>
+
+    <p>
+      Нажми на кнопку — и она ответит тебе!
+    </p>
+
+    <!-- Кнопка, которая будет вызывать действие -->
+    <button class="btn" id="actionButton">✨ Нажми меня</button>
+
+    <!-- Блок для отображения количества нажатий -->
+    <div class="counter-box">
+      <span>👆</span>
+      Нажатий: <span id="clickCounter">0</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    Сделано с ❤️ на чистом HTML · <a href="#" id="resetLink">Сбросить счётчик</a>
+  </div>
+
+  <script>
+    (function() {
+      // Получаем элементы
+      const button = document.getElementById('actionButton');
+      const counterDisplay = document.getElementById('clickCounter');
+      const resetLink = document.getElementById('resetLink');
+
+      // Состояние счётчика
+      let clickCount = 0;
+
+      // Функция обновления текста счётчика
+      function updateCounter() {
+        counterDisplay.textContent = clickCount;
+      }
+
+      // Обработчик клика по кнопке
+      function handleButtonClick() {
+        clickCount += 1;
+        updateCounter();
+
+        // Небольшой визуальный эффект (мигание кнопки)
+        button.style.backgroundColor = '#2563eb';
+        setTimeout(() => {
+          button.style.backgroundColor = '#1e293b';
+        }, 150);
+
+        // Дополнительно: меняем текст кнопки, если нажатий больше 5
+        if (clickCount >= 5) {
+          button.textContent = '🔥 Супер!';
+        } else if (clickCount >= 3) {
+          button.textContent = '👍 Так держать!';
+        } else {
+          button.textContent = '✨ Нажми меня';
+        }
+      }
+
+      // Сброс счётчика
+      function resetCounter() {
+        clickCount = 0;
+        updateCounter();
+        button.textContent = '✨ Нажми меня';
+        // Возвращаем цвет кнопки
+        button.style.backgroundColor = '#1e293b';
+        // небольшой фидбек
+        button.style.transform = 'scale(0.96)';
+        setTimeout(() => {
+          button.style.transform = 'scale(1)';
+        }, 150);
+      }
+
+      // Вешаем обработчики
+      button.addEventListener('click', handleButtonClick);
+
+      resetLink.addEventListener('click', function(e) {
+        e.preventDefault(); // отключаем переход по ссылке
+        resetCounter();
+      });
+
+      // Инициализация: показываем 0
+      updateCounter();
+
+      // На случай, если кто-то захочет сбросить через ссылку — уже готово.
+      // Можно добавить небольшую пасхалку: двойной клик по заголовку сбрасывает счётчик
+      const title = document.querySelector('h1');
+      title.addEventListener('dblclick', function() {
+        resetCounter();
+        // лёгкое уведомление (можно и без него)
+        this.style.color = '#2563eb';
+        setTimeout(() => {
+          this.style.color = '#0f172a';
+        }, 300);
+      });
+
+      console.log('✨ Простой сайт загружен. Счётчик кликов работает!');
+    })();
+  </script>
+</body>
+</html>
